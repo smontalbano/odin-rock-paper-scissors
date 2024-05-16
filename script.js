@@ -1,57 +1,105 @@
 let userScore = 0
 let compScore = 0
-playGame()
 
-function playGame(){
-    while(userScore < 5 && compScore < 5){
-        let userChoice = getHumanChoice();
-        let compChoice = getComputerChoice();
-        playRound(userChoice, compChoice);
-        if (userScore == compScore){
-            alert("Your score: " + userScore + " Computer Score: " + compScore + ". It's a tie!")
-        } else if (userScore > compScore){
-            alert("Your score: " + userScore + " Computer Score: " + compScore + ". You're winning!")
-        } else {
-            alert("Your score: " + userScore + " Computer Score: " + compScore + ". The computer is winning!")
-        }
-    }
-    if (userScore > compScore){
-        return alert("Your score: " + userScore + " Computer Score: " + compScore + ". You win!")
-    } else if (userScore < compScore){
-        return alert("Your score: " + userScore + " Computer Score: " + compScore + ". The computer wins!")
-    }
-}
+const container = document.querySelector(".container");
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
+const title = document.querySelector(".title");
+const scoreCard = document.querySelector(".score");
+const restartButton = document.createElement("button");
+restartButton.textContent = "Restart";
 
+
+
+rockButton.addEventListener("click", () => {
+    const userChoice = "rock";
+    const compChoice = getComputerChoice();
+    const winLose = playRound(userChoice, compChoice);
+    if (winLose == "tie"){
+        title.textContent = "It's a tie!"
+    } else if (winLose == "win"){
+        title.textContent = userChoice[0].toUpperCase() + userChoice.slice(1) + " beats " + compChoice + ". You Win!"
+    } else if (winLose == "lose"){
+        title.textContent = compChoice[0].toUpperCase() + compChoice.slice(1) + " beats " + userChoice + ". Computer Wins!"
+    }
+    
+    scoreCard.textContent = "Your Score: " + userScore + " Computer Score: " + compScore;
+    if (userScore >= 5 || compScore >= 5){
+        restart();
+    }
+})
+
+paperButton.addEventListener("click", () => {
+    const userChoice = "paper";
+    const compChoice = getComputerChoice();
+    const winLose = playRound(userChoice, compChoice);
+    if (winLose == "tie"){
+        title.textContent = "It's a tie!"
+    } else if (winLose == "win"){
+        title.textContent = userChoice[0].toUpperCase() + userChoice.slice(1) + " beats " + compChoice + ". You Win!"
+    } else if (winLose == "lose"){
+        title.textContent = compChoice[0].toUpperCase() + compChoice.slice(1) + " beats " + userChoice + ". Computer Wins!"
+    }
+
+    scoreCard.textContent = "Your Score: " + userScore + " Computer Score: " + compScore;
+    if (userScore >= 5 || compScore >= 5){
+        restart();
+    }
+})
+
+scissorsButton.addEventListener("click", () => {
+    const userChoice = "scissors";
+    const compChoice = getComputerChoice();
+    const winLose = playRound(userChoice, compChoice);
+    if (winLose == "tie"){
+        title.textContent = "It's a tie!"
+    } else if (winLose == "win"){
+        title.textContent = userChoice[0].toUpperCase() + userChoice.slice(1) + " beats " + compChoice + ". You Win!"
+    } else if (winLose == "lose"){
+        title.textContent = compChoice[0].toUpperCase() + compChoice.slice(1) + " beats " + userChoice + ". Computer Wins!"
+    }
+    scoreCard.textContent = "Your Score: " + userScore + " Computer Score: " + compScore;
+    if (userScore >= 5 || compScore >= 5){
+        restart();
+    }
+})
+
+restartButton.addEventListener("click", () => {
+    userScore = 0;
+    compScore = 0;
+    restartButton.remove();
+    container.appendChild(rockButton);
+    container.appendChild(paperButton);
+    container.appendChild(scissorsButton);
+    scoreCard.textContent = "Your Score: " + userScore + " Computer Score: " + compScore;
+    title.textContent = "Select to start"
+})
 function playRound(user, comp){
 
     if (user == comp) {
-        alert("It's a draw!")
+        return "tie";
     } else if (user == "rock" && comp == "scissors"){
-        alert(user[0].toUpperCase() + user.slice(1) + " beats " + comp + ". You Win!")
         userScore++;
+        return "win";
     } else if (user == "rock" && comp == "paper"){
-        alert(comp[0].toUpperCase() + comp.slice(1) + " beats " + user + ". Computer Wins!")
         compScore++;
+        return "lose";
     } else if (user == "paper" && comp == "rock"){
-        alert(user[0].toUpperCase() + user.slice(1) + " beats " + comp + ". You Win!")
         userScore++;
-    } else if (user == "paper" && comp == "scissors"){
-        alert(comp[0].toUpperCase() + comp.slice(1) + " beats " + user + ". Computer Wins!")
+        return "win";
+    } else if (user == "paper" && comp == "scissors"){        
         compScore++;
-    } else if (user == "scissors" && comp == "paper"){
-        alert(user[0].toUpperCase() + user.slice(1) + " beats " + comp + ". You Win!")
+        return "lose";
+    } else if (user == "scissors" && comp == "paper"){        
         userScore++;
+        return "win";
     } else if (user == "scissors" && comp == "rock"){
-        alert(comp[0].toUpperCase() + comp.slice(1) + " beats " + user + ". Computer Wins!")
         compScore++;
+        return "lose";
     } else {
-        alert("Bad input")
+        alert("Bad Input")
     }
-}
-
-function getHumanChoice(){
-    let userChoice = prompt("Choose: Rock, Paper, or Scissors:")
-    return userChoice.toLowerCase();
 }
 
 function getComputerChoice(){
@@ -65,4 +113,18 @@ function getComputerChoice(){
         compChoice = "scissors"
     }
     return compChoice;
+}
+
+function restart(){
+    rockButton.remove();
+    paperButton.remove();
+    scissorsButton.remove();
+    
+    container.appendChild(restartButton);
+
+    if (userScore > compScore){
+        title.textContent = "You Won!"
+    } else {
+        title.textContent = "You Lost!"
+    }
 }
